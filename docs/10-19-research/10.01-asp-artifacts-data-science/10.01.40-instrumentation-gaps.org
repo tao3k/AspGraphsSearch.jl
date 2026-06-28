@@ -1,0 +1,26 @@
+#+TITLE: 10.01.40 Instrumentation Gaps
+
+* Required packet additions
+To support causal flow analysis, future artifacts should record:
+- =eventTimestampMs= coverage in every artifact writer, not only receipts and analysis metadata
+- =startedAtMs= and =endedAtMs= for provider command timing windows
+- =sessionId=
+- =promptId=
+- =actionId=
+- =parentActionId=
+- =recommendedNext=
+- =selectedNextAction=
+- =agentIntent=
+- =failureReason=
+- =routeGraphState=
+
+* Why this matters
+With partial JSON event time, Julia can analyze distribution, latency, graph centrality, event-time phases, repeated command families, packet/schema coverage, and timestamp coverage gaps. It still cannot prove whether the agent followed a recommendation, whether a command was a retry, or whether a slow command was caused by bad route selection versus provider runtime health.
+
+* Research rule
+Notebook reports must separate:
+- observed fact
+- inferred classification
+- event-time inference with explicit =time_source=
+- missing instrumentation
+- recommended protocol improvement

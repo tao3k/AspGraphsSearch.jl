@@ -1,0 +1,36 @@
+#+TITLE: 10.01.20 Action Flow Reconstruction
+
+* Flow graph
+Action flow is reconstructed as a typed directed graph:
+
+#+begin_src text
+artifact-file -> packet-schema -> method -> language -> provider -> operation
+prompt-output-command -> sourceArtifactId/promptOutputArtifactId -> derived packet
+event-phase -> action record
+#+end_src
+
+* Taxonomy
+The first taxonomy separates:
+- =search/fzf=
+- =search/prime=
+- =search/owner=
+- =search/deps= or =search/dependency=
+- =search/query=
+- =query/owner-items=
+- =query/code=
+- =query/direct-source-read=
+- =semantic-tree-sitter-query=
+
+The second taxonomy separates command operations:
+- =query --from-hook=
+- =query --selector=
+- =search owner=
+- =search prime=
+- =search fzf=
+- =search deps=
+- provider-specific variants such as =search pattern=, =search extension=, and =search runtime-source=
+
+* Phase model
+Phases use JSON event timestamps first: =providerCommands[].eventTimestampMs=, =providerCommands[].startedAtMs=, packet-level =eventTimestampMs=, and then legacy timestamp aliases. File mtime is retained only as fallback and is reported through =time_source= / =artifact_time_gap_table=.
+
+Reports must avoid causal claims such as "agent did X after Y" unless packet links or future =parentActionId= fields prove the edge.

@@ -1,0 +1,33 @@
+#+TITLE: 10.01.10 Artifact Data Contract
+
+* Required tables
+The research pipeline materializes these DataFrames:
+
+- =artifact_json_inventory= :: one row per JSON artifact; path, directory, schema, method, language, provider, linked artifact ids, parse status, byte size, weak file mtime, =event_time=, and =time_source=.
+- =artifact_search_packets= :: one row per search/query/analysis packet; method, query, view, language, provider, schema, link fields, =event_time=, and =time_source=.
+- =provider_command_table= :: one row per provider command receipt; command argv, operation, provider, language, elapsed time, exit code, stdout/stderr size, =event_time=, =time_source=, and event phase.
+- =action_taxonomy_table= :: grouped counts by language, method, operation, provider, and command family.
+- =artifact_phase_table= :: event-time buckets derived from JSON timestamps when present, with file mtime only as fallback.
+- =artifact_time_gap_table= :: grouped counts by table, artifact directory, and time source.
+
+* Evidence strength
+Strong evidence:
+- =schemaId= and =method= from JSON packet top-level fields
+- =languageId= and =providerId= from packet and command receipts
+- =providerCommands[].argv=
+- =elapsedMs=, =exitCode=, =stdoutBytes=, =stderrBytes=
+- =sourceArtifactId= and =promptOutputArtifactId= links
+- =eventTimestampMs=, =startedAtMs=, and =endedAtMs= when present
+
+Weak evidence:
+- file modification time as action phase fallback
+- filename-derived action kind
+- command family inferred from executable path
+
+Missing evidence:
+- event timestamp coverage across all artifact writers
+- session id
+- prompt id
+- parent action id
+- recommendedNext adoption status
+- agent intent and failure reason

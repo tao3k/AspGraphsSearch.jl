@@ -1,0 +1,23 @@
+#+TITLE: 10.01 ASP Artifacts Data Science Research
+#+AUTHOR: AspGraphsSearch.jl
+
+* One-sentence summary
+AspGraphsSearch.jl studies ASP search/query artifacts as a typed action-flow dataset: JSON packets, provider command receipts, weak time phases, language/query taxonomy, graph algorithms, and instrumentation gaps are separated before notebook publication.
+
+* Problem
+The initial notebook counted command shapes and rendered a graph, but it did not meet the standard of a modular data-science algorithm study. A useful research surface must first define what the dataset contains, which facts are strong or weak evidence, how agent-triggered search actions can be reconstructed, and which algorithm experiments can produce actionable improvements.
+
+* Module map
+- [[file:10.01-asp-artifacts-data-science/10.01.00-overview.org][Overview And Research Boundary]] :: Why Julia is the offline research layer, not a copy of Python graph-turbo.
+[[file:10.01-asp-artifacts-data-science/10.01.00-overview.org][Overview And Research Boundary]]
+- [[file:10.01-asp-artifacts-data-science/10.01.10-artifact-data-contract.org][Artifact Data Contract]] :: JSON directories, schemas, required DataFrame tables, and evidence strength.
+[[file:10.01-asp-artifacts-data-science/10.01.10-artifact-data-contract.org][Artifact Data Contract]]
+- [[file:10.01-asp-artifacts-data-science/10.01.20-action-flow-reconstruction.org][Action Flow Reconstruction]] :: Language classification, fzf/query/type taxonomy, weak time phases, and flow graph edges.
+[[file:10.01-asp-artifacts-data-science/10.01.20-action-flow-reconstruction.org][Action Flow Reconstruction]]
+- [[file:10.01-asp-artifacts-data-science/10.01.30-algorithm-experiments.org][Algorithm Experiments]] :: Graphs.jl experiments for hotspots, repeated routes, centrality, loops, bursts, and slow-path diagnosis.
+[[file:10.01-asp-artifacts-data-science/10.01.30-algorithm-experiments.org][Algorithm Experiments]]
+- [[file:10.01-asp-artifacts-data-science/10.01.40-instrumentation-gaps.org][Instrumentation Gaps]] :: Missing fields needed to turn weak reconstruction into strong causal analysis.
+[[file:10.01-asp-artifacts-data-science/10.01.40-instrumentation-gaps.org][Instrumentation Gaps]]
+
+* Include order
+Read the module map in order. The notebook should cite these modules and render derived tables/figures; it should not be the only place where research assumptions live.

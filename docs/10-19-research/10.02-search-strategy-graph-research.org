@@ -1,0 +1,64 @@
+#+TITLE: 10.02 Search Strategy Graph Research
+#+AUTHOR: AspGraphsSearch.jl
+
+* Purpose
+Study ASP search strategy behavior across the full artifact lake, not only the repository root cache.
+
+The analyzer aggregates:
+
+- =.cache/agent-semantic-protocol/artifacts=
+- =languages/*/.cache/agent-semantic-protocol/artifacts=
+
+This lets the Julia research layer compare workspace-level behavior with provider-local language package behavior.
+
+* Notebook
+Primary report:
+
+- =notebooks/search_strategy_graph_research.jl=
+- exported HTML: =public/search_strategy_graph_research.html=
+
+Related reports:
+
+- =notebooks/artifacts_search_commands.jl=
+- =notebooks/search_optimization_algorithms.jl=
+- =notebooks/fzf_algorithm_research.jl=
+- =notebooks/rg_algorithm_research.jl=
+
+* Analysis Scope
+The strategy analyzer reconstructs event streams from provider command artifacts and classifies:
+
+- graph-router
+- graph-reasoning
+- semantic-graph
+- owner-routing
+- dependency-routing
+- prime-exploration
+- pattern-scan
+- fzf-selection
+- structural-query
+- direct-source-read
+
+Each event carries =artifact_scope= so repeated JSON paths in different roots do not collapse into one graph node.
+
+* Research Questions
+1. Does graph-router reduce repeated lexical search pressure for the same normalized query key?
+2. Do graph-reasoning events expose enough candidate and edge evidence to explain route choice?
+3. Which language scopes have search activity but no graph strategy telemetry?
+4. Which graph-to-lexical fallback transitions are useful fallbacks, and which indicate missing graph facts?
+5. What artifact fields are required to compare router choices, graph shape, latency, and downstream command count with ScienceResearch.jl experiments?
+
+* Instrumentation Gaps
+When graph-router or graph-reasoning events are missing from artifacts, treat that as a data gap instead of an algorithm conclusion.
+
+Useful future artifact fields:
+
+- =strategy_name=
+- =router_decision=
+- =router_confidence=
+- =candidate_count=
+- =selected_edge_count=
+- =fallback_reason=
+- =normalized_query_key=
+- =result_cache_hit=
+
+These fields would let the Julia notebooks compare search strategy quality with graph centrality, transition pressure, and repeated command count.

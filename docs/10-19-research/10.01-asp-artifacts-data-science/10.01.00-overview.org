@@ -1,0 +1,20 @@
+#+TITLE: 10.01.00 Overview And Research Boundary
+
+* Research boundary
+Python =asp_graph_turbo= owns the production search ranking lane. It uses sparse graph backends, typed personalized PageRank, cached hop/reachable-edge computations, diversity ranking, read-loop guards, and artifact efficiency analysis.
+
+AspGraphsSearch.jl owns the offline research lane:
+- measure what artifacts already contain
+- classify search/query action types by language, provider, method, and command family
+- reconstruct agent-triggered flows from available links and weak time evidence
+- explore graph algorithms and statistics that reveal search-flow improvements
+- publish replayable Pluto reports as static HTML
+
+* Non-goals
+- Do not reimplement Python graph-turbo as a second production ranker.
+- Do not make the notebook a monolithic prose report.
+- Do not infer causal search flow from file names alone when packet links are available.
+- Do not treat file modification time as a strong timestamp.
+
+* Current evidence snapshot
+The current artifact corpus contains thousands of JSON packets across =prompt-output=, =query=, =search=, =analysis-metadata=, and =semantic-tree-sitter-query=. Provider command receipts are available through =providerCommands[]=, while true session timestamps and parent action edges are not yet present in the packets.

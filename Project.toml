@@ -1,0 +1,30 @@
+name = "AspGraphsSearch"
+uuid = "c1e5ccca-e7f5-419b-a2fa-11b1933bc71a"
+version = "0.1.0"
+authors = ["Tao <tao3k>"]
+
+[deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+PlutoStaticHTML = "359b1769-a58e-495b-9770-312e911026ad"
+ScienceResearch = "4f0d7e54-8348-4d38-938d-adb4d52f7f0a"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
+[compat]
+DataFrames = "1.8.2"
+Graphs = "1"
+JSON = "1.6.1"
+Plots = "1.41.6"
+PlutoStaticHTML = "7.0.11"
+ScienceResearch = "0.1"
+julia = "1.10"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
