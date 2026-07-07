@@ -2,14 +2,13 @@
 #+AUTHOR: AspGraphsSearch.jl
 
 * Purpose
-Study ASP search strategy behavior across the full artifact lake, not only the repository root cache.
+Study ASP search strategy behavior across the full State Core artifact lake, not only a legacy repository root cache.
 
 The analyzer aggregates:
 
-- =.cache/agent-semantic-protocol/artifacts=
-- =languages/*/.cache/agent-semantic-protocol/artifacts=
+- current artifacts from =$(asp paths --get artifactsDir <PROJECT_ROOT>)=
 
-This lets the Julia research layer compare workspace-level behavior with provider-local language package behavior.
+This lets the Julia research layer compare workspace-level behavior with provider-local language package behavior without making project-local cache paths the current write target.
 
 * Notebook
 Primary report:

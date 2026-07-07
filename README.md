@@ -5,7 +5,7 @@
 The package has two jobs:
 
 1. Study `asp <language> search/query` workflows as graph algorithms, using `DataFrames.jl` for tabular evidence, `Graphs.jl` for the graph layer, `Plots.jl` for notebook charts, and `ScienceResearch.jl` for research experiment contracts.
-2. Analyze `.cache/agent-semantic-protocol/artifacts` search/query command traces so ASP code and documentation search can be improved with replayable evidence.
+2. Analyze State Core `artifactsDir` search/query command traces so ASP code and documentation search can be improved with replayable evidence.
 
 Python `asp_graph_turbo` already owns the production-side graph-turbo and recommendation lane. This package is research-first: notebook evidence, complex algorithm experiments, dataset/workload descriptors, and static HTML publication.
 
@@ -40,7 +40,8 @@ The main DataScience entry point reads artifact JSON with `JSON.jl`, normalizes 
 ```julia
 using AspGraphsSearch
 
-root = joinpath(dirname(@__DIR__), "..", ".cache", "agent-semantic-protocol", "artifacts")
+project_root = normpath(joinpath(pwd(), "..", ".."))
+root = chomp(read(`asp paths --get artifactsDir $project_root`, String))
 dataset = artifact_research_dataset(root)
 
 dataset.inventory      # JSON inventory with schema/method/language/provider fields
@@ -88,7 +89,8 @@ language filtering, repeated scan pressure, and structural query replacement.
 ```julia
 using AspGraphsSearch
 
-root = joinpath(dirname(@__DIR__), "..", ".cache", "agent-semantic-protocol", "artifacts")
+project_root = normpath(joinpath(pwd(), "..", ".."))
+root = chomp(read(`asp paths --get artifactsDir $project_root`, String))
 records = collect_search_commands(root)
 graph = search_command_graph(records)
 summary = summarize_search_graph(graph)
