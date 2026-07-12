@@ -34,7 +34,7 @@ export SearchCommandRecord,
     artifact_search_optimization_metrics,
     artifact_search_optimization_opportunities,
     artifact_search_optimization_analysis,
-    artifact_fzf_algorithm_analysis,
+    artifact_lexical_algorithm_analysis,
     artifact_rg_algorithm_analysis,
     artifact_search_strategy_table,
     artifact_search_strategy_summary,
@@ -388,7 +388,7 @@ function artifact_improvement_opportunities(artifact_graph::ArtifactSearchGraph;
     add_opportunity!(opportunities, "missing-language-facade", "<generic>", count(record -> record.language === nothing, records), total)
 
     for (operation, count) in count_by(command_operation, records)
-        if count >= 2 || operation in ("pipe", "prime", "fzf", "query", "deps", "owner")
+        if count >= 2 || operation in ("pipe", "prime", "lexical", "query", "deps", "owner")
             add_opportunity!(
                 opportunities,
                 "operation-hotspot",
@@ -478,7 +478,7 @@ end
 function operation_recommendation(operation::AbstractString)
     operation == "pipe" && return "Reduce repeated query-pack refinement by improving first search guidance and nextCommand specificity."
     operation == "prime" && return "Keep prime as owner-map discovery only; add stronger owner/symbol preconditions when repeated."
-    operation == "fzf" && return "Promote broad fuzzy recovery into typed owner/dependency/frontier routes."
+    operation == "lexical" && return "Promote broad fuzzy recovery into typed owner/dependency/frontier routes."
     operation == "deps" && return "Document dependency-topology routes as the preferred first command for package questions."
     operation == "owner" && return "Check whether owner-items output gives enough next-action detail to avoid manual source scans."
     operation == "query" && return "Prefer exact owner or selector identity before query-code reads."

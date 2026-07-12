@@ -5,7 +5,7 @@ struct ArtifactSearchOptimizationGraph
 end
 
 const SEARCH_OPTIMIZATION_TOOLS = Set([
-    "fzf",
+    "lexical",
     "rg",
     "prime",
     "owner-index",
@@ -278,7 +278,7 @@ function artifact_tool_route_summary(events::DataFrame)
     return summary
 end
 
-function artifact_fzf_candidate_pressure(events::DataFrame)
+function artifact_lexical_candidate_pressure(events::DataFrame)
     columns = (
         query_terms = String[],
         target_hint = String[],
@@ -330,7 +330,7 @@ function artifact_rg_pattern_pressure(events::DataFrame)
     return summary
 end
 
-function artifact_fzf_algorithm_notes(events::DataFrame, candidate_pressure::DataFrame, opportunities::DataFrame)
+function artifact_lexical_algorithm_notes(events::DataFrame, candidate_pressure::DataFrame, opportunities::DataFrame)
     repeated = nrow(candidate_pressure) == 0 ? 0 : sum(candidate_pressure.repeat_pressure)
     route_promotions = nrow(opportunities)
     event_count = nrow(events)
@@ -343,12 +343,12 @@ function artifact_fzf_algorithm_notes(events::DataFrame, candidate_pressure::Dat
         ],
         evidence_metric = [
             "events=$(event_count), repeated_normalized_queries=$(repeated)",
-            "fzf_opportunities=$(route_promotions)",
+            "lexical_opportunities=$(route_promotions)",
             "repeat_pressure=$(repeated)",
         ],
         hypothesis = [
-            "fzf should be a last-mile selector over provider-ranked candidates, not the first search primitive.",
-            "Repeated fzf searches with owner/dependency/query intent can be promoted to parser-owned ASP routes.",
+            "lexical should be a last-mile selector over provider-ranked candidates, not the first search primitive.",
+            "Repeated lexical searches with owner/dependency/query intent can be promoted to parser-owned ASP routes.",
             "Stable query/target pairs should reuse ranked candidate sets inside a session.",
         ],
         expected_improvement = [
@@ -357,7 +357,7 @@ function artifact_fzf_algorithm_notes(events::DataFrame, candidate_pressure::Dat
             "Avoid re-running equivalent fuzzy searches during agent fan-out/fan-in loops.",
         ],
         required_instrumentation = [
-            "candidate_count, selected_rank, score_distribution, provider_route_before_fzf",
+            "candidate_count, selected_rank, score_distribution, provider_route_before_lexical",
             "route_decision, promoted_route, rejected_route_reason",
             "session_query_hash, candidate_set_hash, cache_hit",
         ],
@@ -398,15 +398,15 @@ function artifact_rg_algorithm_notes(events::DataFrame, pattern_pressure::DataFr
     )
 end
 
-function artifact_fzf_algorithm_analysis(commands::DataFrame)
+function artifact_lexical_algorithm_analysis(commands::DataFrame)
     overall = artifact_search_optimization_analysis(commands)
-    events = artifact_tool_events(overall.events, "fzf")
+    events = artifact_tool_events(overall.events, "lexical")
     route_summary = artifact_tool_route_summary(events)
-    candidate_pressure = artifact_fzf_candidate_pressure(events)
+    candidate_pressure = artifact_lexical_candidate_pressure(events)
     graph = artifact_search_optimization_graph(events)
     metrics = artifact_search_optimization_metrics(graph)
-    opportunities = artifact_tool_opportunities(overall.opportunities, "fzf")
-    algorithm_notes = artifact_fzf_algorithm_notes(events, candidate_pressure, opportunities)
+    opportunities = artifact_tool_opportunities(overall.opportunities, "lexical")
+    algorithm_notes = artifact_lexical_algorithm_notes(events, candidate_pressure, opportunities)
     return (; events, route_summary, candidate_pressure, graph, metrics, opportunities, algorithm_notes)
 end
 
@@ -752,7 +752,7 @@ function artifact_search_strategy(
     tool == "dependency-index" && return "dependency-routing"
     tool == "prime" && return "prime-exploration"
     (tool == "rg" || query_type == "pattern-search") && return "pattern-scan"
-    tool == "fzf" && return "fzf-selection"
+    tool == "lexical" && return "lexical-selection"
     tool == "structural-query" && return "structural-query"
     tool == "direct-source-read" && return "direct-source-read"
     tool == "generic-search" && return "generic-search"
@@ -776,7 +776,7 @@ end
 function artifact_search_strategy_family(strategy::AbstractString)
     strategy in ("graph-router", "graph-reasoning", "semantic-graph") && return "graph-strategy"
     strategy in ("owner-routing", "dependency-routing", "prime-exploration", "router-search", "reasoning-search") && return "semantic-routing"
-    strategy in ("pattern-scan", "fzf-selection", "generic-search") && return "lexical-search"
+    strategy in ("pattern-scan", "lexical-selection", "generic-search") && return "lexical-search"
     strategy in ("structural-query", "direct-source-read") && return "structural-access"
     return "other"
 end
@@ -820,7 +820,7 @@ function artifact_add_strategy_repeat_opportunities!(rows::DataFrame, events::Da
 end
 
 function artifact_add_strategy_fallback_opportunities!(rows::DataFrame, events::DataFrame)
-    fallback_strategies = Set(["pattern-scan", "direct-source-read", "fzf-selection"])
+    fallback_strategies = Set(["pattern-scan", "direct-source-read", "lexical-selection"])
     graph_strategies = Set(["graph-router", "graph-reasoning", "semantic-graph"])
     sorted_events = sort(events, [:artifact_scope, :event_time, :event_index])
     for group in groupby(sorted_events, :artifact_scope)
@@ -869,7 +869,7 @@ function artifact_add_repeat_search_opportunities!(rows::DataFrame, events::Data
             score = Float64(row.count * 100 + row.elapsed_total_ms),
             evidence_count = row.count,
             evidence = row.normalized_key,
-            recommended_action = "Cache or promote this repeated search shape to a typed route before invoking fzf/rg again.",
+            recommended_action = "Cache or promote this repeated search shape to a typed route before invoking lexical/rg again.",
         ))
     end
 end
@@ -897,11 +897,11 @@ function artifact_add_latency_opportunities!(rows::DataFrame, events::DataFrame)
 end
 
 function artifact_add_tool_route_opportunities!(rows::DataFrame, events::DataFrame)
-    for tool in ("fzf", "rg")
+    for tool in ("lexical", "rg")
         subset = events[events.search_tool .== tool, :]
         nrow(subset) == 0 && continue
-        action = tool == "fzf" ?
-            "Promote repeated fzf owner discovery to owner/dependency topology packets." :
+        action = tool == "lexical" ?
+            "Promote repeated lexical owner discovery to owner/dependency topology packets." :
             "Convert repeated rg patterns into indexed symbol, call, or docs-use queries."
         push!(rows, (
             category = tool * "-route-optimization",
@@ -959,9 +959,9 @@ function artifact_search_tool(argv::Vector{String}, method::AbstractString, oper
     lower_family = lowercase(command_family)
 
     any(token -> basename(token) == "rg" || endswith(token, "/rg"), lower_argv) && return "rg"
-    any(token -> token == "fzf", lower_argv) && return "fzf"
+    any(token -> token == "lexical", lower_argv) && return "lexical"
     any(token -> token == "direct-source-read", lower_argv) && return "direct-source-read"
-    (occursin("search/fzf", lower_method) || occursin("search fzf", lower_operation)) && return "fzf"
+    (occursin("search/lexical", lower_method) || occursin("search lexical", lower_operation)) && return "lexical"
     occursin("rg", lower_family) && return "rg"
     (occursin("search/prime", lower_method) || occursin("search prime", lower_operation)) && return "prime"
     (occursin("search/owner", lower_method) || occursin("search owner", lower_operation)) && return "owner-index"
@@ -976,9 +976,9 @@ function artifact_search_tool(argv::Vector{String}, method::AbstractString, oper
 end
 
 function artifact_search_query_type(argv::Vector{String}, tool::AbstractString, method::AbstractString, operation::AbstractString)
-    if tool == "fzf"
-        mode = artifact_token_after(argv, "fzf", 2)
-        return isempty(mode) ? "fzf" : "fzf-" * mode
+    if tool == "lexical"
+        mode = artifact_token_after(argv, "lexical", 2)
+        return isempty(mode) ? "lexical" : "lexical-" * mode
     elseif tool == "rg"
         return any(token -> startswith(token, "--json"), argv) ? "rg-json-pattern" : "rg-pattern"
     elseif tool == "prime"
@@ -1001,8 +1001,8 @@ function artifact_search_query_type(argv::Vector{String}, tool::AbstractString, 
 end
 
 function artifact_search_query_terms(argv::Vector{String}, tool::AbstractString)
-    if tool == "fzf"
-        return artifact_token_after(argv, "fzf", 1)
+    if tool == "lexical"
+        return artifact_token_after(argv, "lexical", 1)
     elseif tool == "rg"
         index = findfirst(token -> basename(lowercase(token)) == "rg", argv)
         index === nothing && return ""
@@ -1034,7 +1034,7 @@ function artifact_search_target_hint(argv::Vector{String}, tool::AbstractString)
 end
 
 function artifact_route_hint(tool::AbstractString, query_type::AbstractString, target_hint::AbstractString)
-    tool == "fzf" && return "promote-fzf-to-owner-index"
+    tool == "lexical" && return "promote-lexical-to-owner-index"
     tool == "rg" && return "promote-rg-to-structural-index"
     tool == "prime" && return "reuse-prime-topology"
     tool == "owner-index" && return "owner-route"

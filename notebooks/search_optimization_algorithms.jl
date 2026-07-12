@@ -24,9 +24,9 @@ end
 
 # ╔═╡ 11111111-2222-3333-4444-555555555553
 md"""
-# ASP fzf/rg search optimization study
+# ASP lexical/rg search optimization study
 
-Hypothesis: provider command artifacts expose enough fzf, rg, structural query, and direct-source-read behavior to find repeated search shapes, route-promotion candidates, and latency hotspots before changing ASP search algorithms.
+Hypothesis: provider command artifacts expose enough lexical, rg, structural query, and direct-source-read behavior to find repeated search shapes, route-promotion candidates, and latency hotspots before changing ASP search algorithms.
 
 scienceresearch-artifact: build/reports/search-optimization-summary.toml
 """

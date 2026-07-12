@@ -55,7 +55,7 @@ dataset.flow_metrics   # PageRank/degree metrics by typed node
 
 Use `dataset.taxonomy`, `dataset.phases`, and `dataset.flow_metrics` as the first triage surfaces for improving ASP code and docs search.
 
-## fzf/rg Search Optimization Analyzer
+## lexical/rg Search Optimization Analyzer
 
 The search optimization layer turns provider command rows into a route-promotion graph:
 
@@ -63,23 +63,23 @@ The search optimization layer turns provider command rows into a route-promotion
 dataset = artifact_research_dataset(root)
 optimization = artifact_search_optimization_analysis(dataset.commands)
 
-optimization.events         # fzf/rg/prime/query/direct-source-read event table
+optimization.events         # lexical/rg/prime/query/direct-source-read event table
 optimization.summary        # tool/query-type counts and latency
 optimization.graph          # typed tool/query/route graph
 optimization.metrics        # degree and PageRank over optimization graph
-optimization.opportunities  # repeat-search, latency, fzf/rg promotion, time gaps
+optimization.opportunities  # repeat-search, latency, lexical/rg promotion, time gaps
 ```
 
-Use this before changing ASP search behavior. It separates repeated `fzf` discovery, repeated `rg` patterns, structural query routes, direct source reads, and time instrumentation gaps so improvements can be tied to observed command flow.
+Use this before changing ASP search behavior. It separates repeated `lexical` discovery, repeated `rg` patterns, structural query routes, direct source reads, and time instrumentation gaps so improvements can be tied to observed command flow.
 
 Use the split tool analyzers for deeper algorithm work:
 
 ```julia
-fzf = artifact_fzf_algorithm_analysis(dataset.commands)
+lexical = artifact_lexical_algorithm_analysis(dataset.commands)
 rg = artifact_rg_algorithm_analysis(dataset.commands)
 ```
 
-The fzf analyzer focuses on candidate-set pressure, repeated fuzzy query reuse,
+The lexical analyzer focuses on candidate-set pressure, repeated fuzzy query reuse,
 route-promotion opportunities, and the missing instrumentation needed to measure
 candidate pruning. The rg analyzer focuses on pattern selectivity, path and
 language filtering, repeated scan pressure, and structural query replacement.
@@ -120,7 +120,7 @@ The notebook surfaces are:
 
 - `notebooks/artifacts_search_commands.jl`
 - `notebooks/search_optimization_algorithms.jl`
-- `notebooks/fzf_algorithm_research.jl`
+- `notebooks/lexical_algorithm_research.jl`
 - `notebooks/rg_algorithm_research.jl`
 
 Build static HTML through the ScienceResearch publication helper:

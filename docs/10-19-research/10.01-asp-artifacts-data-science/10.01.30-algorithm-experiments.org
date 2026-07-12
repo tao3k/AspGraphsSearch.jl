@@ -9,30 +9,30 @@
 
 * Graph experiments
 - PageRank over action-flow graph to find central methods and providers
-- personalized PageRank seeded from =search/fzf=, =search/prime=, and =query/code=
+- personalized PageRank seeded from =search/lexical=, =search/prime=, and =query/code=
 - connected components for isolated language/provider flows
-- loop and repetition scoring for repeated =prime -> fzf -> owner -> query= paths
+- loop and repetition scoring for repeated =prime -> lexical -> owner -> query= paths
 - burst detection over weak phases
 
 * Search optimization analyzer
 The =artifact_search_optimization_analysis= entry point materializes:
-- =events= :: classified =fzf=, =rg=, =prime=, structural query, dependency, owner, and direct-source-read events
+- =events= :: classified =lexical=, =rg=, =prime=, structural query, dependency, owner, and direct-source-read events
 - =summary= :: counts and latency by search tool and query type
 - =graph= :: typed graph over events, tools, query types, route hints, languages, providers, targets, and normalized query keys
 - =metrics= :: PageRank and degree centrality for route-promotion graph nodes
-- =opportunities= :: repeat-search, latency-hotspot, =fzf= route promotion, =rg= route promotion, generic-route classification gaps, and timestamp coverage gaps
+- =opportunities= :: repeat-search, latency-hotspot, =lexical= route promotion, =rg= route promotion, generic-route classification gaps, and timestamp coverage gaps
 
 This analyzer is the source-level behavior behind the modular Pluto report =notebooks/search_optimization_algorithms.jl=.
 
-The fzf and rg research views are intentionally split:
+The lexical and rg research views are intentionally split:
 
-- =notebooks/fzf_algorithm_research.jl= uses =artifact_fzf_algorithm_analysis= to study candidate-set pressure, fuzzy selection reuse, route-promotion opportunities, and missing candidate-count/rank instrumentation.
+- =notebooks/lexical_algorithm_research.jl= uses =artifact_lexical_algorithm_analysis= to study candidate-set pressure, fuzzy selection reuse, route-promotion opportunities, and missing candidate-count/rank instrumentation.
 - =notebooks/rg_algorithm_research.jl= uses =artifact_rg_algorithm_analysis= to study pattern selectivity, path/language filtering, repeated scan pressure, and structural-query replacement.
 
-The combined =search_optimization_algorithms.jl= notebook should remain an overview. Tool-specific algorithm work belongs in the split notebooks so fzf and rg can evolve with different hypotheses, measurements, and optimization gates.
+The combined =search_optimization_algorithms.jl= notebook should remain an overview. Tool-specific algorithm work belongs in the split notebooks so lexical and rg can evolve with different hypotheses, measurements, and optimization gates.
 
 * Improvement questions
-- Which =fzf= paths should be promoted to typed owner/dependency routes?
+- Which =lexical= paths should be promoted to typed owner/dependency routes?
 - Which repeated =prime= calls are suppressible because owner topology already exists?
 - Which repeated =rg= patterns should become indexed symbol/call/docs-use queries?
 - Which =query/owner-items= calls are slow and concentrated on a small set of owners?

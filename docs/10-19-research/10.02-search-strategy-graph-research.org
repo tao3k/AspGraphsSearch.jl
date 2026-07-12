@@ -20,7 +20,7 @@ Related reports:
 
 - =notebooks/artifacts_search_commands.jl=
 - =notebooks/search_optimization_algorithms.jl=
-- =notebooks/fzf_algorithm_research.jl=
+- =notebooks/lexical_algorithm_research.jl=
 - =notebooks/rg_algorithm_research.jl=
 
 * Analysis Scope
@@ -33,7 +33,7 @@ The strategy analyzer reconstructs event streams from provider command artifacts
 - dependency-routing
 - prime-exploration
 - pattern-scan
-- fzf-selection
+- lexical-selection
 - structural-query
 - direct-source-read
 

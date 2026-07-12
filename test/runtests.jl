@@ -176,7 +176,7 @@ end
                 "eventTimestampMs" => 1_700_001_000_000,
                 "providerCommands" => [
                     Dict(
-                        "argv" => ["rs-harness", "search", "fzf", "GraphTurbo", "owner", "--view", "seeds"],
+                        "argv" => ["rs-harness", "search", "lexical", "GraphTurbo", "owner", "--view", "seeds"],
                         "startedAtMs" => 1_700_001_000_010,
                         "elapsedMs" => 120,
                         "exitCode" => 0,
@@ -186,7 +186,7 @@ end
                         "stderrBytes" => 0,
                     ),
                     Dict(
-                        "argv" => ["rs-harness", "search", "fzf", "GraphTurbo", "owner", "--view", "seeds"],
+                        "argv" => ["rs-harness", "search", "lexical", "GraphTurbo", "owner", "--view", "seeds"],
                         "startedAtMs" => 1_700_001_000_020,
                         "elapsedMs" => 180,
                         "exitCode" => 0,
@@ -222,25 +222,25 @@ end
         commands = artifact_provider_command_table(dir)
         events = artifact_search_tool_table(commands)
         @test size(events, 1) == 4
-        @test count(==("fzf"), events.search_tool) == 2
+        @test count(==("lexical"), events.search_tool) == 2
         @test "rg" in events.search_tool
         @test "direct-source-read" in events.search_tool
         @test all(events.time_source .== "command-json")
 
         summary = artifact_search_tool_summary(events)
-        @test "fzf" in summary.search_tool
+        @test "lexical" in summary.search_tool
         @test "rg" in summary.search_tool
 
         optimization_graph = artifact_search_optimization_graph(events)
         @test nv(optimization_graph.graph) > 0
         metrics = artifact_search_optimization_metrics(optimization_graph)
-        @test "tool:fzf" in metrics.label
+        @test "tool:lexical" in metrics.label
         @test "tool:rg" in metrics.label
 
         opportunities = artifact_search_optimization_opportunities(events)
         @test "repeat-search" in opportunities.category
         @test "latency-hotspot" in opportunities.category
-        @test "fzf-route-optimization" in opportunities.category
+        @test "lexical-route-optimization" in opportunities.category
         @test "rg-route-optimization" in opportunities.category
 
         analysis = artifact_search_optimization_analysis(commands)
@@ -256,9 +256,9 @@ using Graphs
 using JSON
 using Test
 
-@testset "separate fzf and rg algorithm analysis" begin
+@testset "separate lexical and rg algorithm analysis" begin
     commands = DataFrame(
-        relative_path = ["fzf-a.json", "fzf-b.json", "rg-a.json", "rg-b.json", "rg-c.json", "pattern-a.json"],
+        relative_path = ["lexical-a.json", "lexical-b.json", "rg-a.json", "rg-b.json", "rg-c.json", "pattern-a.json"],
         event_phase = [1, 2, 3, 4, 5, 6],
         event_time = [
             Dates.DateTime(2026, 6, 27, 12, 0, 1),
@@ -272,11 +272,11 @@ using Test
         language = fill("rust", 6),
         provider = fill("rs-harness", 6),
         method = fill("search", 6),
-        operation = ["fzf", "fzf", "rg", "rg", "rg", "search pattern"],
+        operation = ["lexical", "lexical", "rg", "rg", "rg", "search pattern"],
         command_family = fill("provider", 6),
         argv_json = [
-            JSON.json(["rs-harness", "search", "fzf", "GraphTurbo", "owner", "--view", "seeds"]),
-            JSON.json(["rs-harness", "search", "fzf", "GraphTurbo", "owner", "--view", "seeds"]),
+            JSON.json(["rs-harness", "search", "lexical", "GraphTurbo", "owner", "--view", "seeds"]),
+            JSON.json(["rs-harness", "search", "lexical", "GraphTurbo", "owner", "--view", "seeds"]),
             JSON.json(["rg", "GraphTurbo", "src", "--json"]),
             JSON.json(["rg", "GraphTurbo", "src", "--json"]),
             JSON.json(["rg", "dependency", "schemas", "--json"]),
@@ -289,15 +289,15 @@ using Test
         stderr_bytes = fill(0, 6),
     )
 
-    fzf = artifact_fzf_algorithm_analysis(commands)
+    lexical = artifact_lexical_algorithm_analysis(commands)
     rg = artifact_rg_algorithm_analysis(commands)
 
-    @test nrow(fzf.events) == 2
-    @test all(fzf.events.search_tool .== "fzf")
-    @test nrow(fzf.candidate_pressure) >= 1
-    @test "candidate-pruning" in fzf.algorithm_notes.research_axis
-    @test "route-promotion" in fzf.algorithm_notes.research_axis
-    @test nv(fzf.graph.graph) > 0
+    @test nrow(lexical.events) == 2
+    @test all(lexical.events.search_tool .== "lexical")
+    @test nrow(lexical.candidate_pressure) >= 1
+    @test "candidate-pruning" in lexical.algorithm_notes.research_axis
+    @test "route-promotion" in lexical.algorithm_notes.research_axis
+    @test nv(lexical.graph.graph) > 0
 
     @test nrow(rg.raw_events) == 3
     @test nrow(rg.pattern_events) == 1

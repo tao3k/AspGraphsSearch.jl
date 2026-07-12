@@ -12,7 +12,7 @@ The initial notebook counted command shapes and rendered a graph, but it did not
 [[file:10.01-asp-artifacts-data-science/10.01.00-overview.org][Overview And Research Boundary]]
 - [[file:10.01-asp-artifacts-data-science/10.01.10-artifact-data-contract.org][Artifact Data Contract]] :: JSON directories, schemas, required DataFrame tables, and evidence strength.
 [[file:10.01-asp-artifacts-data-science/10.01.10-artifact-data-contract.org][Artifact Data Contract]]
-- [[file:10.01-asp-artifacts-data-science/10.01.20-action-flow-reconstruction.org][Action Flow Reconstruction]] :: Language classification, fzf/query/type taxonomy, weak time phases, and flow graph edges.
+- [[file:10.01-asp-artifacts-data-science/10.01.20-action-flow-reconstruction.org][Action Flow Reconstruction]] :: Language classification, lexical/query/type taxonomy, weak time phases, and flow graph edges.
 [[file:10.01-asp-artifacts-data-science/10.01.20-action-flow-reconstruction.org][Action Flow Reconstruction]]
 - [[file:10.01-asp-artifacts-data-science/10.01.30-algorithm-experiments.org][Algorithm Experiments]] :: Graphs.jl experiments for hotspots, repeated routes, centrality, loops, bursts, and slow-path diagnosis.
 [[file:10.01-asp-artifacts-data-science/10.01.30-algorithm-experiments.org][Algorithm Experiments]]

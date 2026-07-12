@@ -11,7 +11,7 @@ event-phase -> action record
 
 * Taxonomy
 The first taxonomy separates:
-- =search/fzf=
+- =search/lexical=
 - =search/prime=
 - =search/owner=
 - =search/deps= or =search/dependency=
@@ -26,7 +26,7 @@ The second taxonomy separates command operations:
 - =query --selector=
 - =search owner=
 - =search prime=
-- =search fzf=
+- =search lexical=
 - =search deps=
 - provider-specific variants such as =search pattern=, =search extension=, and =search runtime-source=
 
